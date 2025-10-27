@@ -42,7 +42,7 @@
       border-radius: 20px;
       padding: var(--pad);
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      margin-bottom: 20px; /* Diubah dari 0px agar ada jarak saat scroll */
+      margin-bottom: 20px;
       position: relative;
       overflow: visible;
       width: calc(50% - 10px);
@@ -215,7 +215,7 @@
 
     const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
 
-    // FUNGSI INI TIDAK DIGUNAKAN LAGI, TAPI KARENA TIDAK MERUSAK, KITA BIARKAN
+    // FUNGSI INI TIDAK DIGUNAKAN LAGI, TAPI KITA BIARKAN
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -261,7 +261,7 @@
 
     const card = document.createElement('div');
     card.className = 'opd-card';
-    card.id = opd.opd_id_url; // 👈 ANCHOR ID DITAMBAHKAN DI SINI
+    card.id = opd.opd_id_url; // ANCHOR ID DITAMBAHKAN DI SINI
     card.innerHTML = `
         <div class="opd-header">
           <div class="emoji-wrap">${opd.emoji}</div>
@@ -320,6 +320,22 @@
       el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%';
     }
 
+    // FUNGSI INI HARUS BERADA DI ATAS AGAR BISA DIPANGGIL OLEH renderAllOPD
+    function attachToggles() {
+        const buttons = document.querySelectorAll('.toggle-btn');
+        buttons.forEach(button => {
+            button.onclick = () => {
+                const targetId = button.getAttribute('aria-controls');
+                const targetElement = document.getElementById(targetId);
+                const isExpanded = button.getAttribute('aria-expanded') === 'true' || false;
+                
+                button.setAttribute('aria-expanded', !isExpanded);
+                targetElement.hidden = isExpanded;
+                button.textContent = isExpanded ? '▼' : '▲';
+            };
+        });
+    }
+
     // FUNGSI RENDER ALL OPD - VERSI BERSIH
     function renderAllOPD(dataOPD) {
       const container = document.getElementById('containerOPD');
@@ -359,7 +375,6 @@
         setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
         // ----------------------------------------------------
       });
-
       attachToggles();
     }
 
@@ -374,22 +389,6 @@ async function initDashboard() {
     // Opsional: Ganti judul halaman menjadi generik
     document.title = "Dashboard OPD — Semua Realisasi";
 }
-
-    // FUNGSI BAWAAN UNTUK MEMBUKA/MENUTUP DETAIL KARTU
-    function attachToggles() {
-        const buttons = document.querySelectorAll('.toggle-btn');
-        buttons.forEach(button => {
-            button.onclick = () => {
-                const targetId = button.getAttribute('aria-controls');
-                const targetElement = document.getElementById(targetId);
-                const isExpanded = button.getAttribute('aria-expanded') === 'true' || false;
-                
-                button.setAttribute('aria-expanded', !isExpanded);
-                targetElement.hidden = isExpanded;
-                button.textContent = isExpanded ? '▼' : '▲';
-            };
-        });
-    }
 
     // JALANKAN DASHBOARD SAAT SEMUA SUDAH DIMUAT
     window.onload = initDashboard;
