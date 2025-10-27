@@ -42,10 +42,12 @@
       border-radius: 20px;
       padding: var(--pad);
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      margin-bottom: 20px;
+      margin-bottom: 20px; 
       position: relative;
       overflow: visible;
-      width: calc(50% - 10px);
+      /* KOREKSI CSS TERAKHIR: GUNAKAN FLEX-BASIS */
+      flex-basis: calc(50% - 10px);
+      min-width: 300px;
       box-sizing: border-box;
     }
 
@@ -172,7 +174,8 @@
       /* Membatasi ukuran pada layar yang lebih kecil */
     @media (max-width: 768px) {
       .opd-card {
-        width: 100%;
+        flex-basis: 100%; /* MEMAKSA SATU KOLOM PADA MOBILE */
+        min-width: unset;
       }
       .pie-canvas {
         max-width: 350px;
@@ -215,7 +218,6 @@
 
     const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
 
-    // FUNGSI INI TIDAK DIGUNAKAN LAGI, TAPI KITA BIARKAN
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -320,7 +322,6 @@
       el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%';
     }
 
-    // FUNGSI INI HARUS BERADA DI ATAS AGAR BISA DIPANGGIL OLEH renderAllOPD
     function attachToggles() {
         const buttons = document.querySelectorAll('.toggle-btn');
         buttons.forEach(button => {
