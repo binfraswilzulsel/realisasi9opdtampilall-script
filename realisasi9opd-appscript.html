@@ -371,40 +371,7 @@ async function initDashboard() {
     
     // 2. Tunggu hingga semua data OPD diambil dari Google Sheet
     const allDataOPD = await fetchOPDData(); 
-    
-    let filteredData = [];
-
-    // 3. Filter data menggunakan properti 'opd_id_url'
-    if (selectedOpdId) {
-        // ID URL sudah kecil (karena diketik manual di index.html)
-        const lowerCaseSelectedId = selectedOpdId; 
-        
-        filteredData = allDataOPD.filter(opd => {
-            // Cek apakah properti opd_id_url ada dan ubah nilainya ke huruf kecil sebelum membandingkan
-            if (opd.opd_id_url) {
-                return opd.opd_id_url.toLowerCase() === lowerCaseSelectedId;
-            }
-            return false; // Lewati jika properti tidak ada
-        }); 
-        
-        if (filteredData.length === 0) {
-            const container = document.getElementById('containerOPD');
-            container.innerHTML = `<h2 style="color:white;text-align:center;">Data OPD dengan ID: "${selectedOpdId.toUpperCase()}" tidak ditemukan. <br> Mohon cek kembali ID di Google Sheet dan URL Index.</h2>`;
-            document.title = `Data OPD ${selectedOpdId.toUpperCase()} Gagal</h2>`;
-            return;
-        }
-        
-        // Ganti Judul Halaman dengan nama Tampilan ('opdName')
-        document.title = `Dashboard OPD — ${filteredData[0].opdName}`;
-    } else {
-        // Jika tidak ada parameter 'opd' di URL, tampilkan semua
-        filteredData = allDataOPD; 
-    }
-
-    // 4. Tampilkan dashboard dengan data yang sudah difilter
-    renderAllOPD(filteredData); 
-}
-
+      
     // Mulai proses inisialisasi
     initDashboard();
   </script>
@@ -415,3 +382,4 @@ Data Extract -> https://sulselprov.e-planning.id <br> 31 Oktober 2025 | 17.05 WI
 
 </body>
 </html>
+
